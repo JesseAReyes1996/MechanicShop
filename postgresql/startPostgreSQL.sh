@@ -1,5 +1,5 @@
 #! /bin/bash
-folder=/tmp/Ashu_Jesse
+folder=/tmp/Jesse
 export PGDATA=$folder/myDB/data
 export PGSOCKETS=$folder/myDB/sockets
 
@@ -21,6 +21,6 @@ initdb
 
 sleep 1
 #Start folder
-export PGPORT=8242
+export PGPORT=8238
 pg_ctl -o "-c unix_socket_directories=$PGSOCKETS -p $PGPORT" -D $PGDATA -l $folder/logfile start
 

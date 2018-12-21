@@ -1,6 +1,6 @@
 #! /bin/bash
-echo "creating db named ... Ashu_Jesse_DB"
-createdb -h localhost -p $PGPORT "Ashu_Jesse_DB"
+echo "creating db named ... Jesse_DB"
+createdb -h localhost -p $PGPORT "Jesse_DB"
 pg_ctl status
 
 echo "Copying csv files ... "
@@ -9,4 +9,4 @@ cp ../data/*.csv /tmp/Ashu_Jesse/myDB/data/.
 
 echo "Initializing tables .. "
 sleep 1
-psql -h localhost -p $PGPORT "Ashu_Jesse_DB" < ../sql/create.sql
+psql -h localhost -p $PGPORT "Jesse_DB" < ../sql/create.sql
