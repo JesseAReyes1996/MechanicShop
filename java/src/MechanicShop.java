@@ -25,7 +25,7 @@ public class MechanicShop{
 	private ArrayList<String> returnVIN = new ArrayList<String>();
 
 	public int returnCustomerID (MechanicShop esql) throws SQLException {
-		String custID = ""; //id of customer adding a car
+		String customerID = ""; //id of customer adding a car
 		String input = ""; //For getting user input
 		boolean chosen = false;
 
@@ -47,8 +47,8 @@ public class MechanicShop{
 				AddCustomer(esql);
 				query = "SELECT id FROM Customer ORDER BY id DESC LIMIT 1";
 				List<List<String>> custID = esql.executeQueryAndReturnResult(query);
-				id = Integer.parseInt(custID.get(0).get(0));
-				return id;
+				customerID = Integer.parseInt(custID.get(0).get(0));
+				return Integer.parseInt(customerID);
 			}
 			else if(Integer.parseInt(input) == 2){
 				//do nothing
@@ -75,15 +75,15 @@ public class MechanicShop{
 				}
 			}
 			//id of chosen customer
-			custID = potentialCustomers.get(Integer.parseInt(input) - 1).get(3);
+			customerID = potentialCustomers.get(Integer.parseInt(input) - 1).get(3);
 		}
 
 		//If only one customer exists with the given last name
 		else if(potentialCustomers.size() == 1){
 			//Get the id of the customer
-			custID = potentialCustomers.get(0).get(3);
+			customerID = potentialCustomers.get(0).get(3);
 		}
-		return Integer.parseInt(custID);
+		return Integer.parseInt(customerID);
 	}
 
 	//reference to physical database connection
