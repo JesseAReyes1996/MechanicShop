@@ -576,7 +576,7 @@ public class MechanicShop{
 
 	public static void ListCustomersWithBillLessThan100(MechanicShop esql){//6
 		try{
-			//Select customers with bills < $100
+			//Select closed requests with bills < $100
 			String query = "SELECT date, comment, bill FROM Closed_Request WHERE bill < 100";
 			List<List<String>> customers = esql.executeQueryAndReturnResult(query);
 			for(int i = 0; i < customers.size(); ++i){
@@ -635,7 +635,7 @@ public class MechanicShop{
 			}
 
 			//Select k cars with the highest number of service requests
-			String query = "SELECT make, model, R.creq FROM Car AS C, (SELECT car_vin, COUNT(rid) AS creq FROM Service_Request GROUP BY car_vin ) AS R WHERE R.car_vin = C.vin ORDER BY R.creq DESC LIMIT " + Integer.toString(k);
+			String query = "SELECT TRIM(make), TRIM(model), R.creq FROM Car AS C, (SELECT car_vin, COUNT(rid) AS creq FROM Service_Request GROUP BY car_vin ) AS R WHERE R.car_vin = C.vin ORDER BY R.creq DESC LIMIT " + Integer.toString(k);
 			List<List<String>> cars = esql.executeQueryAndReturnResult(query);
 			for(int i = 0; i < cars.size(); ++i){
 				System.out.println((i + 1) + ". " + cars.get(i).get(0) + " " + cars.get(i).get(1) + " " + cars.get(i).get(2));
@@ -649,7 +649,7 @@ public class MechanicShop{
 	public static void ListCustomersInDescendingOrderOfTheirTotalBill(MechanicShop esql){//10
 		try{
 			//Select customers in descending order by their total bill
-			String query = "SELECT C.fname , C.lname, Total FROM Customer AS C, (SELECT sr.customer_id, SUM(CR.bill) AS Total FROM Closed_Request AS CR, Service_Request AS SR WHERE CR.rid = SR.rid GROUP BY SR.customer_id) AS A WHERE C.id=A.customer_id ORDER BY A.Total DESC";
+			String query = "SELECT TRIM(C.fname), TRIM(C.lname), Total FROM Customer AS C, (SELECT sr.customer_id, SUM(CR.bill) AS Total FROM Closed_Request AS CR, Service_Request AS SR WHERE CR.rid = SR.rid GROUP BY SR.customer_id) AS A WHERE C.id=A.customer_id ORDER BY A.Total DESC";
 			List<List<String>> customers = esql.executeQueryAndReturnResult(query);
 			for(int i = 0; i < customers.size(); ++i){
 				System.out.println((i + 1) + ". " + customers.get(i).get(0) + " " + customers.get(i).get(1) + " " + customers.get(i).get(2));
