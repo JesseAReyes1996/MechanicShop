@@ -391,7 +391,7 @@ public class MechanicShop{
 		String custID = ""; //id of customer adding a car
 
 		String input; //For getting user input
-		boolean chosen = False;
+		boolean chosen = false;
 
 		try{
 			//Get customer's info
@@ -472,7 +472,7 @@ public class MechanicShop{
 				}
 			}
 			//Store info in DB
-			String query = "INSERT INTO Car(vin, make, model, year) VALUES ('" + vin + "', '" + make + "', '" + model + "', " + Integer.parseInt(year) + ")";
+			query = "INSERT INTO Car(vin, make, model, year) VALUES ('" + vin + "', '" + make + "', '" + model + "', " + Integer.parseInt(year) + ")";
 			esql.executeUpdate(query);
 
 			//auto increment Owns id
