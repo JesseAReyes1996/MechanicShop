@@ -24,8 +24,11 @@ public class MechanicShop{
 	private boolean insertingSR = false;
 	private ArrayList<String> returnVIN = new ArrayList<String>();
 
-	public int returnCustomerID (){
+	public int returnCustomerID (esql){
 		String custID = ""; //id of customer adding a car
+		String input = ""; //For getting user input
+		boolean chosen = false;
+
 		//Get customer's info
 		System.out.print("Enter customer's last name: ");
 		String lname = in.readLine();
@@ -42,11 +45,14 @@ public class MechanicShop{
 			input = in.readLine();
 			if(Integer.parseInt(input) == 1){
 				AddCustomer(esql);
-				return;
+				query = "SELECT id FROM Customer ORDER BY id DESC LIMIT 1";
+				List<List<String>> custID = esql.executeQueryAndReturnResult(query);
+				id = Integer.parseInt(custID.get(0).get(0));
+				return id;
 			}
 			else if(Integer.parseInt(input) == 2){
 				//do nothing
-				return;
+				return -1;
 			}
 		}
 
