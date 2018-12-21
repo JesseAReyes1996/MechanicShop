@@ -31,7 +31,12 @@ public class MechanicShop{
 
 		//Get customer's info
 		System.out.print("Enter customer's last name: ");
-		String lname = in.readLine();
+		try{
+			String lname = in.readLine();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+
 
 		//Select customers whose name matches the given last name
 		String query = "SELECT TRIM(fname), phone, address, id FROM Customer WHERE LOWER(lname) = LOWER('" + lname + "')";
@@ -42,7 +47,12 @@ public class MechanicShop{
 			System.out.println("Sorry, we couldn't find any customers with that last name");
 			System.out.println("Would you like to add a new customer?");
 			System.out.println("1. Yes\n2. No");
-			input = in.readLine();
+			try{
+				input = in.readLine();
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+
 			if(Integer.parseInt(input) == 1){
 				AddCustomer(esql);
 				query = "SELECT id FROM Customer ORDER BY id DESC LIMIT 1";
@@ -66,7 +76,11 @@ public class MechanicShop{
 			System.out.println("Choose which customer initiated the service request");
 			chosen = false;
 			while(!chosen){
-				input = in.readLine();//TODO Input error checking
+				try{
+					input = in.readLine();//TODO Input error checking
+				}catch(IOException e){
+					e.printStackTrace();
+				}
 				if(Integer.parseInt(input) > potentialCustomers.size() || Integer.parseInt(input) <= 0){
 					System.out.println("Invalid input, enter a number from 1-" + Integer.toString(potentialCustomers.size()));
 				}
