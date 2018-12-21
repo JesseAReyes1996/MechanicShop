@@ -390,7 +390,7 @@ public class MechanicShop{
 		//Information about the car's owner
 		String custID = ""; //id of customer adding a car
 
-		String input; //For getting user input
+		String input = ""; //For getting user input
 		boolean chosen = false;
 
 		try{
