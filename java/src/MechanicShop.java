@@ -25,7 +25,7 @@ public class MechanicShop{
 	private ArrayList<String> returnVIN = new ArrayList<String>();
 
 	public int returnCustomerID (MechanicShop esql) throws SQLException {
-		String customerID = ""; //id of customer adding a car
+		String customerID = "";
 		String input = ""; //For getting user input
 		boolean chosen = false;
 
@@ -47,7 +47,7 @@ public class MechanicShop{
 				AddCustomer(esql);
 				query = "SELECT id FROM Customer ORDER BY id DESC LIMIT 1";
 				List<List<String>> custID = esql.executeQueryAndReturnResult(query);
-				customerID = Integer.parseInt(custID.get(0).get(0));
+				customerID = custID.get(0).get(0);
 				return Integer.parseInt(customerID);
 			}
 			else if(Integer.parseInt(input) == 2){
