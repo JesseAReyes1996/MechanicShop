@@ -24,7 +24,7 @@ public class MechanicShop{
 	private boolean insertingSR = false;
 	private ArrayList<String> returnVIN = new ArrayList<String>();
 
-	public int returnCustomerID (esql) throws SQLException {
+	public int returnCustomerID (MechanicShop esql) throws SQLException {
 		String custID = ""; //id of customer adding a car
 		String input = ""; //For getting user input
 		boolean chosen = false;
