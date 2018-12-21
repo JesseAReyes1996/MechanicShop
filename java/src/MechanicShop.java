@@ -1,16 +1,3 @@
-/*
- * Template JAVA User Interface
- * =============================
- *
- * Database Management Systems
- * Department of Computer Science &amp; Engineering
- * University of California - Riverside
- *
- * Target DBMS: 'Postgres'
- *
- */
-
-
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -23,10 +10,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
-//NEW
 import java.util.Date;
 import java.text.SimpleDateFormat;
-//NEW
 
 /**
  * This class defines a simple embedded SQL utility class that is designed to
@@ -35,25 +20,21 @@ import java.text.SimpleDateFormat;
  */
 
 public class MechanicShop{
-	//reference to physical database connection
-	private Connection _connection = null;
-	static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-
-	//my definitions
-	
 	//For retrieving VIN from customer without any cars when inserting a service request
 	private boolean insertingSR = false;
 	private ArrayList<String> returnVIN = new ArrayList<String>();
 
-	//my definitions
-	
+	//reference to physical database connection
+	private Connection _connection = null;
+	static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
 	public MechanicShop(String dbname, String dbport, String user, String passwd) throws SQLException {
 		System.out.print("Connecting to database...");
 		try{
 			// constructs the connection URL
 			String url = "jdbc:postgresql://localhost:" + dbport + "/" + dbname;
 			System.out.println ("Connection URL: " + url + "\n");
-			
+
 			// obtain a physical connection
 	        this._connection = DriverManager.getConnection(url, user, passwd);
 	        System.out.println("Done");
@@ -63,15 +44,15 @@ public class MechanicShop{
 	        System.exit(-1);
 		}
 	}
-	
+
 	/**
 	 * Method to execute an update SQL statement.  Update SQL instructions
 	 * includes CREATE, INSERT, UPDATE, DELETE, and DROP.
-	 * 
+	 *
 	 * @param sql the input SQL string
 	 * @throws java.sql.SQLException when update failed
 	 * */
-	public void executeUpdate (String sql) throws SQLException { 
+	public void executeUpdate (String sql) throws SQLException {
 		// creates a statement object
 		Statement stmt = this._connection.createStatement ();
 
@@ -86,7 +67,7 @@ public class MechanicShop{
 	 * Method to execute an input query SQL instruction (i.e. SELECT).  This
 	 * method issues the query to the DBMS and outputs the results to
 	 * standard out.
-	 * 
+	 *
 	 * @param query the input query string
 	 * @return the number of rows returned
 	 * @throws java.sql.SQLException when failed to execute the query
@@ -105,7 +86,7 @@ public class MechanicShop{
 		ResultSetMetaData rsmd = rs.getMetaData ();
 		int numCol = rsmd.getColumnCount ();
 		int rowCount = 0;
-		
+
 		//iterates through the result set and output them to standard out.
 		boolean outputHeader = true;
 		while (rs.next()){
@@ -124,48 +105,48 @@ public class MechanicShop{
 		stmt.close ();
 		return rowCount;
 	}
-	
+
 	/**
 	 * Method to execute an input query SQL instruction (i.e. SELECT).  This
 	 * method issues the query to the DBMS and returns the results as
 	 * a list of records. Each record in turn is a list of attribute values
-	 * 
+	 *
 	 * @param query the input query string
 	 * @return the query result as a list of records
 	 * @throws java.sql.SQLException when failed to execute the query
 	 */
-	public List<List<String>> executeQueryAndReturnResult (String query) throws SQLException { 
-		//creates a statement object 
-		Statement stmt = this._connection.createStatement (); 
-		
-		//issues the query instruction 
-		ResultSet rs = stmt.executeQuery (query); 
-	 
+	public List<List<String>> executeQueryAndReturnResult (String query) throws SQLException {
+		//creates a statement object
+		Statement stmt = this._connection.createStatement ();
+
+		//issues the query instruction
+		ResultSet rs = stmt.executeQuery (query);
+
 		/*
-		 * obtains the metadata object for the returned result set.  The metadata 
-		 * contains row and column info. 
-		*/ 
-		ResultSetMetaData rsmd = rs.getMetaData (); 
-		int numCol = rsmd.getColumnCount (); 
-		int rowCount = 0; 
-	 
-		//iterates through the result set and saves the data returned by the query. 
+		 * obtains the metadata object for the returned result set.  The metadata
+		 * contains row and column info.
+		*/
+		ResultSetMetaData rsmd = rs.getMetaData ();
+		int numCol = rsmd.getColumnCount ();
+		int rowCount = 0;
+
+		//iterates through the result set and saves the data returned by the query.
 		boolean outputHeader = false;
-		List<List<String>> result  = new ArrayList<List<String>>(); 
+		List<List<String>> result  = new ArrayList<List<String>>();
 		while (rs.next()){
-			List<String> record = new ArrayList<String>(); 
-			for (int i=1; i<=numCol; ++i) 
-				record.add(rs.getString (i)); 
-			result.add(record); 
-		}//end while 
-		stmt.close (); 
-		return result; 
+			List<String> record = new ArrayList<String>();
+			for (int i=1; i<=numCol; ++i)
+				record.add(rs.getString (i));
+			result.add(record);
+		}//end while
+		stmt.close ();
+		return result;
 	}//end executeQueryAndReturnResult
-	
+
 	/**
 	 * Method to execute an input query SQL instruction (i.e. SELECT).  This
 	 * method issues the query to the DBMS and returns the number of results
-	 * 
+	 *
 	 * @param query the input query string
 	 * @return the number of rows returned
 	 * @throws java.sql.SQLException when failed to execute the query
@@ -186,20 +167,20 @@ public class MechanicShop{
 		stmt.close ();
 		return rowCount;
 	}
-	
+
 	/**
 	 * Method to fetch the last value from sequence. This
-	 * method issues the query to the DBMS and returns the current 
+	 * method issues the query to the DBMS and returns the current
 	 * value of sequence used for autogenerated keys
-	 * 
+	 *
 	 * @param sequence name of the DB sequence
 	 * @return current value of a sequence
 	 * @throws java.sql.SQLException when failed to execute the query
 	 */
-	
+
 	public int getCurrSeqVal(String sequence) throws SQLException {
 		Statement stmt = this._connection.createStatement ();
-		
+
 		ResultSet rs = stmt.executeQuery (String.format("Select currval('%s')", sequence));
 		if (rs.next()) return rs.getInt(1);
 		return -1;
@@ -220,7 +201,7 @@ public class MechanicShop{
 
 	/**
 	 * The main execution method
-	 * 
+	 *
 	 * @param args the command line arguments this inclues the <mysql|pgsql> <login file>
 	 */
 	public static void main (String[] args) {
@@ -230,12 +211,12 @@ public class MechanicShop{
 		            " <dbname> <port> <user>");
 			return;
 		}//end if
-		
+
 		MechanicShop esql = null;
-		
+
 		try{
 			System.out.println("(1)");
-			
+
 			try {
 				Class.forName("org.postgresql.Driver");
 			}catch(Exception e){
@@ -244,14 +225,14 @@ public class MechanicShop{
 				e.printStackTrace();
 				return;
 			}
-			
+
 			System.out.println("(2)");
 			String dbname = args[0];
 			String dbport = args[1];
 			String user = args[2];
-			
+
 			esql = new MechanicShop (dbname, dbport, user, "");
-			
+
 			boolean keepon = true;
 			while(keepon){
 				System.out.println("MAIN MENU");
@@ -267,7 +248,7 @@ public class MechanicShop{
 				System.out.println("9. ListKCarsWithTheMostServices");
 				System.out.println("10. ListCustomersInDescendingOrderOfTheirTotalBill");
 				System.out.println("11. < EXIT");
-				
+
 				/*
 				 * FOLLOW THE SPECIFICATION IN THE PROJECT DESCRIPTION
 				 */
@@ -293,7 +274,7 @@ public class MechanicShop{
 					System.out.print("Disconnecting from database...");
 					esql.cleanup ();
 					System.out.println("Done\n\nBye!");
-				}//end if				
+				}//end if
 			}catch(Exception e){
 				// ignored.
 			}
@@ -315,8 +296,8 @@ public class MechanicShop{
 		}while (true);
 		return input;
 	}//end readChoice
-	
-	public static void AddCustomer(MechanicShop esql){//1	
+
+	public static void AddCustomer(MechanicShop esql){//1
 		String fname, lname, phone = "", address;
 		int id; //Customer PRIMARY KEY
 
@@ -347,13 +328,13 @@ public class MechanicShop{
 			address = in.readLine();
 			//Store info in DB
 			query = "INSERT INTO Customer(id, fname, lname, phone, address) VALUES (" + id + ", '" + fname + "', '" + lname + "', '" + phone + "', '" + address + "')";
-			esql.executeUpdate(query);			
+			esql.executeUpdate(query);
 		}catch(Exception e){
 			System.err.println(e.getMessage());
 		}
-		
+
 	}
-	
+
 	public static void AddMechanic(MechanicShop esql){//2
 		String fname, lname, experience = "-1";
 		int id; //Mechanic PRIMARY KEY
@@ -397,7 +378,7 @@ public class MechanicShop{
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 	public static void AddCar(MechanicShop esql){//3
 		//VIN is Car PRIMARY KEY
 		String make, model, year = "-1", vin;
@@ -445,7 +426,7 @@ public class MechanicShop{
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 	public static void InsertServiceRequest(MechanicShop esql){//4
 		String input = ""; //For getting user input
 		boolean chosen = false;
@@ -459,11 +440,11 @@ public class MechanicShop{
 		try{
 			System.out.print("Enter customer's last name: ");
 			String lname = in.readLine();
-			
+
 			//Select customers whose name matches the given last name
 			String query = "SELECT TRIM(fname), phone, address, id FROM Customer WHERE LOWER(lname) = LOWER('" + lname + "')";
 			List<List<String>> potentialCustomers = esql.executeQueryAndReturnResult(query);
-			
+
 			//If no customer exists with given last name
 			if(potentialCustomers.size() == 0){
 				System.out.println("Sorry, we couldn't find any customers with that last name");
@@ -479,7 +460,7 @@ public class MechanicShop{
 					return;
 				}
 			}
-			
+
 			//If more than one customer with the same last name
 			else if(potentialCustomers.size() > 1){
 				//Print out all the different customers with the same last name
@@ -501,17 +482,17 @@ public class MechanicShop{
 				//id of chosen customer
 				id = potentialCustomers.get(Integer.parseInt(input) - 1).get(3);
 			}
-			
+
 			//If only one customer exists with the given last name
 			else if(potentialCustomers.size() == 1){
 				//Get the id of the customer
 				id = potentialCustomers.get(0).get(3);
 			}
-			
+
 			//Get list of VINs from cars belonging to the customer
 			query = "SELECT car_vin FROM Owns WHERE customer_id = " + id;
 			List<List<String>> vins = esql.executeQueryAndReturnResult(query);
-			
+
 			//Print list of cars to potentially service
 			List<List<String>> cars;
 			if(vins.size() > 0){
@@ -588,19 +569,29 @@ public class MechanicShop{
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 	public static void CloseServiceRequest(MechanicShop esql) throws Exception{//5
-		
+
 	}
-	
+
 	public static void ListCustomersWithBillLessThan100(MechanicShop esql){//6
-		
+		try{
+			//Select customers with bills < $100
+			String query = "SELECT date, comment, bill FROM Closed_Request WHERE bill < 100";
+			List<List<String>> customers = esql.executeQueryAndReturnResult(query);
+			for(int i = 0; i < customers.size(); ++i){
+				System.out.println((i + 1) + ". " + customers.get(i).get(0) + " " + customers.get(i).get(1) + " " + customers.get(i).get(2));
+			}
+			System.out.println();
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 	}
-	
+
 	public static void ListCustomersWithMoreThan20Cars(MechanicShop esql){//7
 		try{
 			//Select customers with more than 20 cars
-			String query = "SELECT TRIM(fname), lname FROM Customer, (SELECT customer_id, COUNT(customer_id) as car_num FROM Owns	GROUP BY customer_id HAVING COUNT(customer_id) > 20) AS O WHERE O.customer_id = id";
+			String query = "SELECT TRIM(fname), lname FROM Customer, (SELECT customer_id, COUNT(customer_id) as car_num FROM Owns GROUP BY customer_id HAVING COUNT(customer_id) > 20) AS O WHERE O.customer_id = id";
 			List<List<String>> customers = esql.executeQueryAndReturnResult(query);
 			for(int i = 0; i < customers.size(); ++i){
 				System.out.println((i + 1) + ". " + customers.get(i).get(0) + " " + customers.get(i).get(1));
@@ -610,7 +601,7 @@ public class MechanicShop{
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 	public static void ListCarsBefore1995With50000Milles(MechanicShop esql){//8
 		try{
 			//Select cars built before 1995 with less than 50000 miles
@@ -624,15 +615,49 @@ public class MechanicShop{
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 	public static void ListKCarsWithTheMostServices(MechanicShop esql){//9
-		//
-		
+		try{
+			//Get k from user
+			System.out.println("Enter the amount of cars you would like to display: ");
+			String input; //For getting user input
+			boolean chosen = false;
+			int k = 0; //Amount of cars to list
+			while(!chosen){
+				input = in.readLine();
+				if(Integer.parseInt(input) <= 0){
+					System.out.println("Invalid input, enter a number greater than 0");
+				}
+				else{
+					chosen = true;
+					k = Integer.parseInt(input);
+				}
+			}
+
+			//Select k cars with the highest number of service requests
+			String query = "SELECT make, model, R.creq FROM Car AS C, (SELECT car_vin, COUNT(rid) AS creq FROM Service_Request GROUP BY car_vin ) AS R WHERE R.car_vin = C.vin ORDER BY R.creq DESC LIMIT " + Integer.toString(k);
+			List<List<String>> cars = esql.executeQueryAndReturnResult(query);
+			for(int i = 0; i < cars.size(); ++i){
+				System.out.println((i + 1) + ". " + cars.get(i).get(0) + " " + cars.get(i).get(1) + " " + cars.get(i).get(2));
+			}
+			System.out.println();
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 	}
-	
-	public static void ListCustomersInDescendingOrderOfTheirTotalBill(MechanicShop esql){//9
-		//
-		
+
+	public static void ListCustomersInDescendingOrderOfTheirTotalBill(MechanicShop esql){//10
+		try{
+			//Select customers in descending order by their total bill
+			String query = "SELECT C.fname , C.lname, Total FROM Customer AS C, (SELECT sr.customer_id, SUM(CR.bill) AS Total FROM Closed_Request AS CR, Service_Request AS SR WHERE CR.rid = SR.rid GROUP BY SR.customer_id) AS A WHERE C.id=A.customer_id ORDER BY A.Total DESC";
+			List<List<String>> customers = esql.executeQueryAndReturnResult(query);
+			for(int i = 0; i < customers.size(); ++i){
+				System.out.println((i + 1) + ". " + customers.get(i).get(0) + " " + customers.get(i).get(1) + " " + customers.get(i).get(2));
+			}
+			System.out.println();
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 	}
-	
+
 }
