@@ -4,6 +4,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.io.IOException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
@@ -26,13 +27,14 @@ public class MechanicShop{
 
 	public int returnCustomerID (MechanicShop esql) throws SQLException {
 		String customerID = "";
+		String lname = ""; //Customer's last name
 		String input = ""; //For getting user input
 		boolean chosen = false;
 
 		//Get customer's info
 		System.out.print("Enter customer's last name: ");
 		try{
-			String lname = in.readLine();
+			lname = in.readLine();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
