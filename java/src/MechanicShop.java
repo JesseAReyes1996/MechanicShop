@@ -39,7 +39,6 @@ public class MechanicShop{
 			e.printStackTrace();
 		}
 
-
 		//Select customers whose name matches the given last name
 		String query = "SELECT TRIM(fname), phone, address, id FROM Customer WHERE LOWER(lname) = LOWER('" + lname + "')";
 		List<List<String>> potentialCustomers = esql.executeQueryAndReturnResult(query);
@@ -64,7 +63,7 @@ public class MechanicShop{
 			}
 			else if(Integer.parseInt(input) == 2){
 				//do nothing
-				return -1;
+				return -1; //Error code
 			}
 		}
 
@@ -472,6 +471,7 @@ public class MechanicShop{
 		boolean chosen = false;
 
 		try{
+			/*
 			//Get customer's info
 			System.out.print("Enter car owner's last name: ");
 			String lname = in.readLine();
@@ -522,7 +522,8 @@ public class MechanicShop{
 			else if(potentialCustomers.size() == 1){
 				//Get the id of the customer
 				custID = potentialCustomers.get(0).get(3);
-			}
+			}*/
+			custID = Integer.toString(returnCustomerID(esql));
 
 			//Get car's info
 			System.out.print("Car's VIN: ");
@@ -582,7 +583,7 @@ public class MechanicShop{
 		String complaint = ""; //The reason for bringing the car in for service
 
 		try{
-			System.out.print("Enter customer's last name: ");
+			/*System.out.print("Enter customer's last name: ");
 			String lname = in.readLine();
 
 			//Select customers whose name matches the given last name
@@ -631,7 +632,8 @@ public class MechanicShop{
 			else if(potentialCustomers.size() == 1){
 				//Get the id of the customer
 				id = potentialCustomers.get(0).get(3);
-			}
+			}*/
+			id = Integer.toString(returnCustomerID(esql));
 
 			//Get list of VINs from cars belonging to the customer
 			query = "SELECT car_vin FROM Owns WHERE customer_id = " + id;
