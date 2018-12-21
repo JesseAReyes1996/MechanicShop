@@ -379,7 +379,7 @@ public class MechanicShop{
 		}
 	}
 
-	public static void AddCar(MechanicShop esql){//3
+	public static void AddCar(MechanicShop esql){//3 //Add who owns the car
 		//VIN is Car PRIMARY KEY
 		String make, model, year = "-1", vin;
 
@@ -387,8 +387,63 @@ public class MechanicShop{
 		boolean correctDomain = false;
 		int checkYear;
 
+		//Information about the car's owner
+		String custID = ""; //id of customer adding a car
+
 		try{
-			//Get car info
+			//Get customer's info
+			System.out.print("Enter car owner's last name: ");
+			String lname = in.readLine();
+
+			//Select customers whose name matches the given last name
+			String query = "SELECT TRIM(fname), phone, address, id FROM Customer WHERE LOWER(lname) = LOWER('" + lname + "')";
+			List<List<String>> potentialCustomers = esql.executeQueryAndReturnResult(query);
+
+			//If no customer exists with given last name
+			if(potentialCustomers.size() == 0){
+				System.out.println("Sorry, we couldn't find any customers with that last name");
+				System.out.println("Would you like to add a new customer?");
+				System.out.println("1. Yes\n2. No");
+				input = in.readLine();
+				if(Integer.parseInt(input) == 1){
+					AddCustomer(esql);
+					return;
+				}
+				else if(Integer.parseInt(input) == 2){
+					//do nothing
+					return;
+				}
+			}
+
+			//If more than one customer with the same last name
+			else if(potentialCustomers.size() > 1){
+				//Print out all the different customers with the same last name
+				for(int i = 0; i < potentialCustomers.size(); ++i){
+					System.out.println(Integer.toString(i + 1) + ". First Name: " + potentialCustomers.get(i).get(0) + ", Phone Number: " + potentialCustomers.get(i).get(1) + ", Address: " + potentialCustomers.get(i).get(2));
+				}
+				//Choose the customer who is initiating the service request
+				System.out.println("Choose which customer initiated the service request");
+				chosen = false;
+				while(!chosen){
+					input = in.readLine();//TODO Input error checking
+					if(Integer.parseInt(input) > potentialCustomers.size() || Integer.parseInt(input) <= 0){
+						System.out.println("Invalid input, enter a number from 1-" + Integer.toString(potentialCustomers.size()));
+					}
+					else{
+						chosen = true;
+					}
+				}
+				//id of chosen customer
+				custID = potentialCustomers.get(Integer.parseInt(input) - 1).get(3);
+			}
+
+			//If only one customer exists with the given last name
+			else if(potentialCustomers.size() == 1){
+				//Get the id of the customer
+				custID = potentialCustomers.get(0).get(3);
+			}
+
+			//Get car's info
 			System.out.print("Car's VIN: ");
 			vin = in.readLine();
 			System.out.print("Car's make: ");
@@ -415,6 +470,14 @@ public class MechanicShop{
 			}
 			//Store info in DB
 			String query = "INSERT INTO Car(vin, make, model, year) VALUES ('" + vin + "', '" + make + "', '" + model + "', " + Integer.parseInt(year) + ")";
+			esql.executeUpdate(query);
+
+			//auto increment Owns id
+			query = "SELECT ownership_id FROM Owns ORDER BY id DESC LIMIT 1";
+			List<List<String>> ownsID = esql.executeQueryAndReturnResult(query);
+			int ownershipID = Integer.parseInt(ownsID.get(0).get(0)) + 1;
+
+			query = "INSERT INTO Owns(ownership_id, customer_id, car_vin) VALUES (" + ownershipID + ", " + custID + ", '" + vin + "')";
 			esql.executeUpdate(query);
 
 			//When adding a new car for InsertServiceRequest, return the car's VIN
@@ -524,13 +587,6 @@ public class MechanicShop{
 				AddCar(esql);
 				vin = esql.returnVIN.get(0);
 				esql.returnVIN.remove(0);
-
-				//Add the new car to the 'Owns' table
-				query = "SELECT ownership_id FROM Owns ORDER BY ownership_id DESC LIMIT 1";
-				List<List<String>> ownership_id = esql.executeQueryAndReturnResult(query);
-				int ownershipID = Integer.parseInt(ownership_id.get(0).get(0)) + 1;
-				query = "INSERT INTO Owns(ownership_id, customer_id, car_vin) VALUES(" + ownershipID + ", " + Integer.parseInt(id) + ", '" + vin + "')";
-				esql.executeUpdate(query);
 			}
 
 			//Get the miles from the odometer
