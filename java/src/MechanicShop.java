@@ -24,6 +24,62 @@ public class MechanicShop{
 	private boolean insertingSR = false;
 	private ArrayList<String> returnVIN = new ArrayList<String>();
 
+	public int returnCustomerID (){
+		String custID = ""; //id of customer adding a car
+		//Get customer's info
+		System.out.print("Enter customer's last name: ");
+		String lname = in.readLine();
+
+		//Select customers whose name matches the given last name
+		String query = "SELECT TRIM(fname), phone, address, id FROM Customer WHERE LOWER(lname) = LOWER('" + lname + "')";
+		List<List<String>> potentialCustomers = esql.executeQueryAndReturnResult(query);
+
+		//If no customer exists with given last name
+		if(potentialCustomers.size() == 0){
+			System.out.println("Sorry, we couldn't find any customers with that last name");
+			System.out.println("Would you like to add a new customer?");
+			System.out.println("1. Yes\n2. No");
+			input = in.readLine();
+			if(Integer.parseInt(input) == 1){
+				AddCustomer(esql);
+				return;
+			}
+			else if(Integer.parseInt(input) == 2){
+				//do nothing
+				return;
+			}
+		}
+
+		//If more than one customer with the same last name
+		else if(potentialCustomers.size() > 1){
+			//Print out all the different customers with the same last name
+			for(int i = 0; i < potentialCustomers.size(); ++i){
+				System.out.println(Integer.toString(i + 1) + ". First Name: " + potentialCustomers.get(i).get(0) + ", Phone Number: " + potentialCustomers.get(i).get(1) + ", Address: " + potentialCustomers.get(i).get(2));
+			}
+			//Choose the customer who is initiating the service request
+			System.out.println("Choose which customer initiated the service request");
+			chosen = false;
+			while(!chosen){
+				input = in.readLine();//TODO Input error checking
+				if(Integer.parseInt(input) > potentialCustomers.size() || Integer.parseInt(input) <= 0){
+					System.out.println("Invalid input, enter a number from 1-" + Integer.toString(potentialCustomers.size()));
+				}
+				else{
+					chosen = true;
+				}
+			}
+			//id of chosen customer
+			custID = potentialCustomers.get(Integer.parseInt(input) - 1).get(3);
+		}
+
+		//If only one customer exists with the given last name
+		else if(potentialCustomers.size() == 1){
+			//Get the id of the customer
+			custID = potentialCustomers.get(0).get(3);
+		}
+		return Integer.parseInt(custID);
+	}
+
 	//reference to physical database connection
 	private Connection _connection = null;
 	static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
