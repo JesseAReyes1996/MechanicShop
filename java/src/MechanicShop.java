@@ -470,7 +470,7 @@ public class MechanicShop{
 		int custID = -1; //id of customer adding a car
 
 		String input = ""; //For getting user input
-		boolean chosen = false;
+		boolean correctVIN = false;
 
 		try{
 			//When adding a new car for InsertServiceRequest, don't use getCustomerID()
@@ -489,7 +489,17 @@ public class MechanicShop{
 
 			//Get car's info
 			System.out.print("Car's VIN: ");
-			vin = in.readLine();
+			while(true){
+				vin = in.readLine();
+				if(vin.length() != 16){
+					System.out.println("VIN must be 16 characters");
+					System.out.print("Car's VIN: ");
+				}
+				else{
+					break;
+				}
+			}
+
 			System.out.print("Car's make: ");
 			make = in.readLine();
 			System.out.print("Car's model: ");
