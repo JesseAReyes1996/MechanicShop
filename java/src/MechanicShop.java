@@ -383,7 +383,7 @@ public class MechanicShop{
 		boolean correctFormat = false;
 
 		try{
-			//auto increment Customer id
+			//auto increment Customer ID
 			String query = "SELECT id FROM Customer ORDER BY id DESC LIMIT 1";
 			List<List<String>> custID = esql.executeQueryAndReturnResult(query);
 			id = Integer.parseInt(custID.get(0).get(0)) + 1;
@@ -423,7 +423,7 @@ public class MechanicShop{
 		int checkYears;
 
 		try{
-			//auto increment Mechanic id
+			//auto increment Mechanic ID
 			String query = "SELECT id FROM Mechanic ORDER BY id DESC LIMIT 1";
 			List<List<String>> mechID = esql.executeQueryAndReturnResult(query);
 			id = Integer.parseInt(mechID.get(0).get(0)) + 1;
@@ -526,7 +526,7 @@ public class MechanicShop{
 			String query = "INSERT INTO Car(vin, make, model, year) VALUES ('" + vin + "', '" + make + "', '" + model + "', " + Integer.parseInt(year) + ")";
 			esql.executeUpdate(query);
 
-			//auto increment Owns id
+			//auto increment Owns ID
 			query = "SELECT ownership_id FROM Owns ORDER BY ownership_id DESC LIMIT 1";
 			List<List<String>> ownsID = esql.executeQueryAndReturnResult(query);
 			int ownershipID = Integer.parseInt(ownsID.get(0).get(0)) + 1;
@@ -613,7 +613,7 @@ public class MechanicShop{
 				}
 			}
 
-			//auto increment Service_Request id
+			//auto increment Service_Request ID
 			query = "SELECT rid FROM Service_Request ORDER BY rid DESC LIMIT 1";
 			List<List<String>> servicerequestID = esql.executeQueryAndReturnResult(query);
 			rid = Integer.parseInt(servicerequestID.get(0).get(0)) + 1;
@@ -638,6 +638,106 @@ public class MechanicShop{
 	}
 
 	public static void CloseServiceRequest(MechanicShop esql) throws Exception{//5
+		int mechID = -1;
+		int custID = -1;
+
+		int bill = 0; //The customer's bill for the service request
+
+		String input = ""; //For getting user input
+
+		try{
+			//Get mechanic ID
+			System.out.print("Enter the mechanic's ID: ");
+			input = in.readLine();
+
+			//Check to see if the mechanic is an employee
+			String query = "SELECT id FROM Mechanic WHERE id = " + input;
+			List<List<String>> mechanic = esql.executeQueryAndReturnResult(query);
+
+			//If no mechanic exists with given ID
+			if(mechanic.size() == 0){
+				System.out.println("ERROR: Invalid mechanic ID");
+				return;
+			}
+			mechID = Integer.parseInt(mechanic.get(0).get(0));
+
+			//Get customer ID
+			custID = esql.getCustomerID(esql);
+			if(custID == -1)
+			{
+				System.out.println("ERROR: Invalid customer ID");
+				return;
+			}
+
+			//Get cars that are being serviced
+			query = "SELECT car_vin, rid, complain FROM Service_Request WHERE customer_id = " + Integer.toString(custID);
+			List<List<String>> service_requests = esql.executeQueryAndReturnResult(query);
+
+			//Either delete request or check to see if it is not already closed TODO
+
+			//Customer does not have any open service requests
+			if(service_requests.size() == 0){
+				System.out.println("Customer currently has no open service requests");
+				return;
+			}
+
+			//Select which request to close
+			System.out.println("Select the service request to close");
+			for(int i = 0; i < service_requests.size(); ++i){
+				System.out.println((i + 1) + ". " + service_requests.get(i).get(0) + " " + service_requests.get(i).get(1) + " " + service_requests.get(i).get(2));
+			}
+
+			boolean chosen = false;
+			while(!chosen){
+				input = in.readLine();
+				if(Integer.parseInt(input) > service_requests.size() || Integer.parseInt(input) <= 0){
+					System.out.print("Invalid input, enter a number from 1-" + Integer.toString(service_requests.size()));
+				}
+				else{
+					chosen = true;
+					System.out.println();
+				}
+			}
+
+			//Get the ID of the request to be closed
+			int rid = Integer.parseInt(service_requests.get((Integer.parseInt(input) - 1)).get(1));
+
+			//auto increment closed request ID
+			String query = "SELECT wid FROM Closed_Request ORDER BY id DESC LIMIT 1";
+			List<List<String>> closed_request_ID = esql.executeQueryAndReturnResult(query);
+			int wid = Integer.parseInt(closed_request_ID.get(0).get(0)) + 1;
+
+			//Get date request is being closed on TODO
+			String datey = "10/22/2018 00:00";
+
+			//Get the mechanic's comment
+			System.out.println("Enter a brief comment on the outcome of the service request: ");
+			String comment = in.readLine();
+			comment = comment.replace("'","''");
+			System.out.println();
+
+			//Charge the bill
+			chosen = false;
+			while(!chosen){
+				input = in.readLine();
+				if(Integer.parseInt(input) <= 0){
+					System.out.print("Invalid input, the bill must be greater than 0");
+				}
+				else{
+					chosen = true;
+					bill = Integer.parseInt(input);
+					System.out.println();
+				}
+			}
+
+			//Insert the closed request
+			query = "INSERT INTO Closed_Request(wid, rid, mid, date, comment, bill) VALUES (" + wid + ", " + rid + ", " + mechID + ", '" + datey + "', '" + comment + "', " + bill + ")";
+
+			//Execute insert then run a quick test. Fix date format for InsertServiceRequest and for CloseServiceRequest. Also change variable name datey to something else
+
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 
 	}
 
