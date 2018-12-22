@@ -25,7 +25,8 @@ public class MechanicShop{
 	private boolean insertingSR = false;
 	private ArrayList<String> returnVIN = new ArrayList<String>();
 
-	public int returnCustomerID (MechanicShop esql) throws SQLException {
+	//public int returnCustomerID (MechanicShop esql) throws SQLException {
+	public int returnCustomerID () throws SQLException {
 		String customerID = "";
 		String lname = ""; //Customer's last name
 		String input = ""; //For getting user input
@@ -523,7 +524,7 @@ public class MechanicShop{
 				//Get the id of the customer
 				custID = potentialCustomers.get(0).get(3);
 			}*/
-			custID = Integer.toString(returnCustomerID(esql));
+			custID = Integer.toString(esql.returnCustomerID());
 
 			//Get car's info
 			System.out.print("Car's VIN: ");
@@ -551,7 +552,7 @@ public class MechanicShop{
 				}
 			}
 			//Store info in DB
-			query = "INSERT INTO Car(vin, make, model, year) VALUES ('" + vin + "', '" + make + "', '" + model + "', " + Integer.parseInt(year) + ")";
+			String query = "INSERT INTO Car(vin, make, model, year) VALUES ('" + vin + "', '" + make + "', '" + model + "', " + Integer.parseInt(year) + ")";
 			esql.executeUpdate(query);
 
 			//auto increment Owns id
@@ -633,10 +634,10 @@ public class MechanicShop{
 				//Get the id of the customer
 				id = potentialCustomers.get(0).get(3);
 			}*/
-			id = Integer.toString(returnCustomerID(esql));
+			id = Integer.toString(esql.returnCustomerID());
 
 			//Get list of VINs from cars belonging to the customer
-			query = "SELECT car_vin FROM Owns WHERE customer_id = " + id;
+			String query = "SELECT car_vin FROM Owns WHERE customer_id = " + id;
 			List<List<String>> vins = esql.executeQueryAndReturnResult(query);
 
 			//Print list of cars to potentially service
