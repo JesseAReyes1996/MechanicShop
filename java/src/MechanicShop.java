@@ -561,7 +561,7 @@ public class MechanicShop{
 			esql.executeUpdate(query);
 
 			//auto increment Owns id
-			query = "SELECT ownership_id FROM Owns ORDER BY id DESC LIMIT 1";
+			query = "SELECT ownership_id FROM Owns ORDER BY ownership_id DESC LIMIT 1";
 			List<List<String>> ownsID = esql.executeQueryAndReturnResult(query);
 			int ownershipID = Integer.parseInt(ownsID.get(0).get(0)) + 1;
 
