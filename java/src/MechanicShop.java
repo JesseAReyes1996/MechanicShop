@@ -525,7 +525,7 @@ public class MechanicShop{
 				//Get the id of the customer
 				custID = potentialCustomers.get(0).get(3);
 			}*/
-			custID = Integer.toString(esql.returnCustomerID(esql));
+			custID = esql.returnCustomerID(esql);
 			if(custID == -1){
 				System.out.println("ERROR: Invalid customer ID");
 				return;
@@ -582,7 +582,7 @@ public class MechanicShop{
 		String input = ""; //For getting user input
 		boolean chosen = false;
 		int rid = 0; //Service Request id
-		int custID = ""; //id of customer initiating the service request
+		int custID = -1; //id of customer initiating the service request
 		String vin = ""; //VIN of car needing the service
 		String date = ""; //Date brought in for service
 		int odometer = 0; //Number of miles on the cars odometer
@@ -639,7 +639,7 @@ public class MechanicShop{
 				//Get the id of the customer
 				id = potentialCustomers.get(0).get(3);
 			}*/
-			custID = Integer.toString(esql.returnCustomerID(esql));
+			custID = esql.returnCustomerID(esql);
 			if(custID == -1){
 				System.out.println("ERROR: Invalid customer ID");
 				return;
