@@ -75,8 +75,8 @@ public class MechanicShop{
 			for(int i = 0; i < potentialCustomers.size(); ++i){
 				System.out.println(Integer.toString(i + 1) + ". First Name: " + potentialCustomers.get(i).get(0) + ", Phone Number: " + potentialCustomers.get(i).get(1) + ", Address: " + potentialCustomers.get(i).get(2));
 			}
-			//Choose the customer who is initiating the service request
-			System.out.println("Choose which customer initiated the service request");
+			//Choose the current customer
+			System.out.println("Choose a customer");
 			chosen = false;
 			while(!chosen){
 				try{
@@ -458,7 +458,7 @@ public class MechanicShop{
 		}
 	}
 
-	public static void AddCar(MechanicShop esql){//3 //Add who owns the car
+	public static void AddCar(MechanicShop esql){//3
 		//VIN is Car PRIMARY KEY
 		String make, model, year = "-1", vin;
 
