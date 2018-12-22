@@ -49,6 +49,7 @@ public class MechanicShop{
 			System.out.println("Sorry, we couldn't find any customers with that last name");
 			System.out.println("Would you like to add a new customer?");
 			System.out.println("1. Yes\n2. No");
+
 			try{
 				input = in.readLine();
 			}catch(IOException e){
@@ -466,7 +467,7 @@ public class MechanicShop{
 		int checkYear;
 
 		//Information about the car's owner
-		String custID = ""; //id of customer adding a car
+		int custID = -1; //id of customer adding a car
 
 		String input = ""; //For getting user input
 		boolean chosen = false;
@@ -525,6 +526,10 @@ public class MechanicShop{
 				custID = potentialCustomers.get(0).get(3);
 			}*/
 			custID = Integer.toString(esql.returnCustomerID(esql));
+			if(custID == -1){
+				System.out.println("ERROR: Invalid customer ID");
+				return;
+			}
 
 			//Get car's info
 			System.out.print("Car's VIN: ");
@@ -577,7 +582,7 @@ public class MechanicShop{
 		String input = ""; //For getting user input
 		boolean chosen = false;
 		int rid = 0; //Service Request id
-		String id = ""; //id of customer initiating the service request
+		int custID = ""; //id of customer initiating the service request
 		String vin = ""; //VIN of car needing the service
 		String date = ""; //Date brought in for service
 		int odometer = 0; //Number of miles on the cars odometer
@@ -634,10 +639,14 @@ public class MechanicShop{
 				//Get the id of the customer
 				id = potentialCustomers.get(0).get(3);
 			}*/
-			id = Integer.toString(esql.returnCustomerID(esql));
+			custID = Integer.toString(esql.returnCustomerID(esql));
+			if(custID == -1){
+				System.out.println("ERROR: Invalid customer ID");
+				return;
+			}
 
 			//Get list of VINs from cars belonging to the customer
-			String query = "SELECT car_vin FROM Owns WHERE customer_id = " + id;
+			String query = "SELECT car_vin FROM Owns WHERE customer_id = " + Integer.toString(custID);
 			List<List<String>> vins = esql.executeQueryAndReturnResult(query);
 
 			//Print list of cars to potentially service
@@ -703,7 +712,7 @@ public class MechanicShop{
 			System.out.println();
 
 			//Execute the query
-			query = "INSERT INTO Service_Request(rid, customer_id, car_vin, date, odometer, complain) VALUES (" + rid + ", " + Integer.parseInt(id) + ", '" + vin + "', '" + date + "', " + odometer + ", '" + complaint + "')";
+			query = "INSERT INTO Service_Request(rid, customer_id, car_vin, date, odometer, complain) VALUES (" + rid + ", " + custID + ", '" + vin + "', '" + date + "', " + odometer + ", '" + complaint + "')";
 			esql.executeUpdate(query);
 		}catch(Exception e){
 			System.err.println(e.getMessage());
