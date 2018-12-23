@@ -211,7 +211,7 @@ public class MechanicShop{
 
 		//iterates through the result set and saves the data returned by the query.
 		boolean outputHeader = false;
-		List<List<String>> result  = new ArrayList<List<String>>();
+		List<List<String>> result = new ArrayList<List<String>>();
 		while (rs.next()){
 			List<String> record = new ArrayList<String>();
 			for (int i=1; i<=numCol; ++i)
@@ -681,17 +681,30 @@ public class MechanicShop{
 				return;
 			}
 
-			//Select which request to close
-			System.out.println("Select the service request to close:"); //TODO Do not show requests that have already been closed
+			//Get service requests that are currently open
+			List<List<String>> potentialServiceRequests = new ArrayList<List<String>>();
+			//To check whether the request has already been closed
+			int closedRequestChecker = 0;
 			for(int i = 0; i < service_requests.size(); ++i){
-				System.out.println((i + 1) + ". " + service_requests.get(i).get(0) + " " + service_requests.get(i).get(1) + " " + service_requests.get(i).get(2));
+				query = "SELECT * FROM Closed_Request WHERE rid = " + service_requests.get(i).get(1);
+				closedRequestChecker = esql.executeQuery(query);
+				//Request has not been closed yet, add it to the list of potentially closeable requests
+				if(closedRequestChecker == 0){
+					potentialServiceRequests.add(service_requests.get(i));
+				}
+			}
+
+			//Select which request to close
+			System.out.println("Select the service request to close:");
+			for(int i = 0; i < potentialServiceRequests.size(); ++i){
+				System.out.println((i + 1) + ". " + potentialServiceRequests.get(i).get(0) + " " + potentialServiceRequests.get(i).get(1) + " " + potentialServiceRequests.get(i).get(2));
 			}
 
 			boolean chosen = false;
 			while(!chosen){
 				input = in.readLine();
-				if(Integer.parseInt(input) > service_requests.size() || Integer.parseInt(input) <= 0){
-					System.out.print("Invalid input, enter a number from 1-" + Integer.toString(service_requests.size()));
+				if(Integer.parseInt(input) > potentialServiceRequests.size() || Integer.parseInt(input) <= 0){
+					System.out.print("Invalid input, enter a number from 1-" + Integer.toString(potentialServiceRequests.size()));
 				}
 				else{
 					chosen = true;
@@ -700,7 +713,7 @@ public class MechanicShop{
 			}
 
 			//Get the ID of the request to be closed
-			int rid = Integer.parseInt(service_requests.get((Integer.parseInt(input) - 1)).get(1));
+			int rid = Integer.parseInt(potentialServiceRequests.get((Integer.parseInt(input) - 1)).get(1));
 
 			//auto increment closed request ID
 			query = "SELECT wid FROM Closed_Request ORDER BY wid DESC LIMIT 1";
