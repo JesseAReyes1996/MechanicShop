@@ -622,10 +622,6 @@ public class MechanicShop{
 			Date getDate = new Date();
 			date = new SimpleDateFormat("MM-dd-yyyy hh:mm").format(getDate);
 
-			//
-			System.out.println(date);
-			//
-
 			//Get the customer's complaint
 			System.out.println("Enter a brief description of the problem: ");
 			complaint = in.readLine();
@@ -644,6 +640,8 @@ public class MechanicShop{
 	public static void CloseServiceRequest(MechanicShop esql) throws Exception{//5
 		int mechID = -1;
 		int custID = -1;
+
+		String date = "";
 
 		int bill = 0; //The customer's bill for the service request
 
@@ -709,8 +707,9 @@ public class MechanicShop{
 			List<List<String>> closed_request_ID = esql.executeQueryAndReturnResult(query);
 			int wid = Integer.parseInt(closed_request_ID.get(0).get(0)) + 1;
 
-			//Get date request is being closed on TODO
-			String datey = "10/22/2018 00:00";
+			//Get date request is being closed on
+			Date getDate = new Date();
+			date = new SimpleDateFormat("MM-dd-yyyy hh:mm").format(getDate);
 
 			//Get the mechanic's comment
 			System.out.println("Enter a brief comment on the outcome of the service request: ");
@@ -732,18 +731,17 @@ public class MechanicShop{
 				}
 			}
 
-			//Either delete request or check to see if it is not already closed TODO
-
 			//Insert the closed request
-			query = "INSERT INTO Closed_Request(wid, rid, mid, date, comment, bill) VALUES (" + wid + ", " + rid + ", " + mechID + ", '" + datey + "', '" + comment + "', " + bill + ")";
+			query = "INSERT INTO Closed_Request(wid, rid, mid, date, comment, bill) VALUES (" + wid + ", " + rid + ", " + mechID + ", '" + date + "', '" + comment + "', " + bill + ")";
 			esql.executeUpdate(query);
 
-			//Execute insert then run a quick test. Fix date format for InsertServiceRequest and for CloseServiceRequest. Also change variable name datey to something else
+			//Delete the open service request
+			query = "DELETE FROM Service_Request WHERE rid = " + Integer.toString(rid);
+			esql.executeUpdate(query);
 
 		}catch(Exception e){
 			System.err.println(e.getMessage());
 		}
-
 	}
 
 	public static void ListCustomersWithBillLessThan100(MechanicShop esql){//6
