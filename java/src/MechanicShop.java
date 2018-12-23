@@ -620,7 +620,7 @@ public class MechanicShop{
 
 			//Get the current date
 			Date getDate = new Date();
-			date = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss").format(getDate);
+			date = new SimpleDateFormat("MM-dd-yyyy hh:mm").format(getDate);
 
 			//
 			System.out.println(date);
