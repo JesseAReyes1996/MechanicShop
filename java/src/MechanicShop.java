@@ -704,7 +704,7 @@ public class MechanicShop{
 			while(!chosen){
 				input = in.readLine();
 				if(Integer.parseInt(input) > potentialServiceRequests.size() || Integer.parseInt(input) <= 0){
-					System.out.print("Invalid input, enter a number from 1-" + Integer.toString(potentialServiceRequests.size()));
+					System.out.println("Invalid input, enter a number from 1-" + Integer.toString(potentialServiceRequests.size()));
 				}
 				else{
 					chosen = true;
