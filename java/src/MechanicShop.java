@@ -733,7 +733,7 @@ public class MechanicShop{
 			//Charge the bill
 			chosen = false;
 			while(!chosen){
-				System.out.print("Enter the total bill for the service request: ");
+				System.out.print("Enter the total bill for the service request: $");
 				input = in.readLine();
 				if(Integer.parseInt(input) <= 0){
 					System.out.println("Invalid input, the bill must be greater than 0");
