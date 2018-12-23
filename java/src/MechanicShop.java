@@ -749,11 +749,6 @@ public class MechanicShop{
 			query = "INSERT INTO Closed_Request(wid, rid, mid, date, comment, bill) VALUES (" + wid + ", " + rid + ", " + mechID + ", '" + date + "', '" + comment + "', " + bill + ")";
 			esql.executeUpdate(query);
 
-			//Cannot delete because of foreign key constraints
-			//Delete the open service request
-			//query = "DELETE FROM Service_Request WHERE rid = " + Integer.toString(rid);
-			//esql.executeUpdate(query);
-
 		}catch(Exception e){
 			System.err.println(e.getMessage());
 		}
