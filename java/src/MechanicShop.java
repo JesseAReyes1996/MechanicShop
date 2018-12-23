@@ -675,12 +675,6 @@ public class MechanicShop{
 			query = "SELECT car_vin, rid, complain FROM Service_Request WHERE customer_id = " + Integer.toString(custID);
 			List<List<String>> service_requests = esql.executeQueryAndReturnResult(query);
 
-			//Customer does not have any open service requests
-			if(service_requests.size() == 0){
-				System.out.println("Customer currently has no open service requests");
-				return;
-			}
-
 			//Get service requests that are currently open
 			List<List<String>> potentialServiceRequests = new ArrayList<List<String>>();
 			//To check whether the request has already been closed
@@ -692,6 +686,12 @@ public class MechanicShop{
 				if(closedRequestChecker == 0){
 					potentialServiceRequests.add(service_requests.get(i));
 				}
+			}
+
+			//Customer does not have any open service requests
+			if(potentialServiceRequests.size() == 0){
+				System.out.println("Customer currently has no open service requests");
+				return;
 			}
 
 			//Select which request to close
