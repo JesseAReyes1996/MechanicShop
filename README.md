@@ -2,9 +2,9 @@
 
 To start the DB, navigate to /postgresql and run in the following order,
 
-source startpostgredb.sh
+source startPostgreDB.sh
 
-source createpostgredb.sh
+source createPostgreSQL.sh
 
 Then, navigate to /java and run
 
@@ -16,4 +16,4 @@ After using the application, please shut down the server by navigating to /postg
 
 Then run
 
-source stoppostgredb.sh
+source stopPostgreDB.sh
