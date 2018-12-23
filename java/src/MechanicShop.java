@@ -682,7 +682,7 @@ public class MechanicShop{
 			}
 
 			//Select which request to close
-			System.out.println("Select the service request to close");
+			System.out.println("Select the service request to close:"); //TODO Do not show requests that have already been closed
 			for(int i = 0; i < service_requests.size(); ++i){
 				System.out.println((i + 1) + ". " + service_requests.get(i).get(0) + " " + service_requests.get(i).get(1) + " " + service_requests.get(i).get(2));
 			}
@@ -720,9 +720,10 @@ public class MechanicShop{
 			//Charge the bill
 			chosen = false;
 			while(!chosen){
+				System.out.print("Enter the total bill for the service request: ");
 				input = in.readLine();
 				if(Integer.parseInt(input) <= 0){
-					System.out.print("Invalid input, the bill must be greater than 0");
+					System.out.println("Invalid input, the bill must be greater than 0");
 				}
 				else{
 					chosen = true;
@@ -735,9 +736,9 @@ public class MechanicShop{
 			query = "INSERT INTO Closed_Request(wid, rid, mid, date, comment, bill) VALUES (" + wid + ", " + rid + ", " + mechID + ", '" + date + "', '" + comment + "', " + bill + ")";
 			esql.executeUpdate(query);
 
-			//Delete the open service request
-			query = "DELETE FROM Service_Request WHERE rid = " + Integer.toString(rid);
-			esql.executeUpdate(query);
+			//Delete the open service request cannot delete because of foreign key constraints
+			//query = "DELETE FROM Service_Request WHERE rid = " + Integer.toString(rid);
+			//esql.executeUpdate(query);
 
 		}catch(Exception e){
 			System.err.println(e.getMessage());
