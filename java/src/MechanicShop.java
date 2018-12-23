@@ -620,7 +620,11 @@ public class MechanicShop{
 
 			//Get the current date
 			Date getDate = new Date();
-			date = new SimpleDateFormat("yyyy-MM-dd").format(getDate);
+			date = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss").format(getDate);
+
+			//
+			System.out.println(date);
+			//
 
 			//Get the customer's complaint
 			System.out.println("Enter a brief description of the problem: ");
@@ -672,8 +676,6 @@ public class MechanicShop{
 			//Get cars that are being serviced
 			query = "SELECT car_vin, rid, complain FROM Service_Request WHERE customer_id = " + Integer.toString(custID);
 			List<List<String>> service_requests = esql.executeQueryAndReturnResult(query);
-
-			//Either delete request or check to see if it is not already closed TODO
 
 			//Customer does not have any open service requests
 			if(service_requests.size() == 0){
@@ -730,8 +732,11 @@ public class MechanicShop{
 				}
 			}
 
+			//Either delete request or check to see if it is not already closed TODO
+
 			//Insert the closed request
 			query = "INSERT INTO Closed_Request(wid, rid, mid, date, comment, bill) VALUES (" + wid + ", " + rid + ", " + mechID + ", '" + datey + "', '" + comment + "', " + bill + ")";
+			esql.executeUpdate(query);
 
 			//Execute insert then run a quick test. Fix date format for InsertServiceRequest and for CloseServiceRequest. Also change variable name datey to something else
 
