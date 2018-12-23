@@ -705,7 +705,7 @@ public class MechanicShop{
 			int rid = Integer.parseInt(service_requests.get((Integer.parseInt(input) - 1)).get(1));
 
 			//auto increment closed request ID
-			String query = "SELECT wid FROM Closed_Request ORDER BY id DESC LIMIT 1";
+			query = "SELECT wid FROM Closed_Request ORDER BY id DESC LIMIT 1";
 			List<List<String>> closed_request_ID = esql.executeQueryAndReturnResult(query);
 			int wid = Integer.parseInt(closed_request_ID.get(0).get(0)) + 1;
 
