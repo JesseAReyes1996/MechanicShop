@@ -2,9 +2,9 @@
 
 To start the DB, navigate to /postgresql and run in the following order,
 
-source startPostgreDB.sh
+source startPostgreSQL.sh
 
-source createPostgreSQL.sh
+source createPostgreDB.sh
 
 Then, navigate to /java and run
 
